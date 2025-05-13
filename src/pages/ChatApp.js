@@ -7,13 +7,33 @@ const ChatApp = () => {
   ]);
   const [input, setInput] = useState("");
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim() === "") return;
+
     const userMessage = { sender: "user", text: input };
-    const botResponse = { sender: "bot", text: askQuestion(input) };
-    setMessages((prev) => [...prev, userMessage, botResponse]);
+    const typingMessage = { sender: "bot", text: "...", id: "typing" }; // Add ID to identify it
+
+    setMessages((prev) => [...prev, userMessage, typingMessage]);
     setInput("");
+
+    try {
+      const response = await askQuestion(input);
+      const botText = response || "Sorry, I couldn't understand that.";
+      const botMessage = { sender: "bot", text: botText };
+
+      // Replace the typing message
+      setMessages((prev) =>
+        prev.map((msg) => (msg.id === "typing" ? botMessage : msg))
+      );
+    } catch (err) {
+      const errorMessage = { sender: "bot", text: "Error getting response." };
+      setMessages((prev) =>
+        prev.map((msg) => (msg.id === "typing" ? errorMessage : msg))
+      );
+    }
   };
+
+
 
   const dummyResponse = (msg) => {
     return "I need to think about it";
@@ -30,7 +50,7 @@ const ChatApp = () => {
       });
   
       console.log('Response:', response.data);
-      return response;
+      return response.data;
 
     } catch (error) {
       console.error('Error:', error);
@@ -49,11 +69,12 @@ const ChatApp = () => {
       style={{ backgroundImage: "url('https://serosoft.in/client_assets/IIITB/homepage.jpg')" }}
     >
       <div className="w-[100px] sm:w-[400px] md:w-[500px] max-w-full bg-white bg-opacity-95 rounded-2xl shadow-lg p-4 flex flex-col h-[95vh]">
+        <img
+          alt="logo hai bhai idhar"
+          src="https://www.iiitb.ac.in/includefiles/userfiles/images/iiitb_logo.png"
+          className="w-12 h-12 mb-4 object-contain mx-auto"
+        />
         <div className="flex-1 overflow-y-auto mb-4 flex flex-col space-y-2">
-          <img
-            src="https://www.iiitb.ac.in/includefiles/userfiles/images/iiitb_logo.png"
-            className="w-12 h-12 mb-4 object-contain mx-auto"
-          />
           {messages.map((msg, index) => (
             <div
               key={index}
@@ -70,7 +91,7 @@ const ChatApp = () => {
                 <div className="mb-1 font-semibold">
                   {msg.sender === "user" ? "User:" : "Bot:"}
                 </div>
-                <div>{msg.text}</div>
+                <div className="whitespace-pre-wrap">{msg.text}</div>
               </div>
             </div>
           ))}

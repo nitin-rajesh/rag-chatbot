@@ -1,14 +1,7 @@
-FROM jenkins/jenkins:lts
-USER root
+# Dockerfile: DinD with npm installed
+FROM docker:dind
 
-# Install Docker
-RUN apt update
-RUN apt install -y docker.io
+RUN apk add --no-cache nodejs npm
 
-# Install Node.js and NPM
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - 
-RUN apt-get install -y nodejs
-
-VOLUME /var/jenkins
-
-EXPOSE 3000 8080
+# Optional: show versions during build
+RUN node -v && npm -v

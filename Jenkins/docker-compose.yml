@@ -10,6 +10,7 @@ services:
     ports:
       - "8080:8080"  # Expose Jenkins UI
       - "50000:50000"  # For Jenkins agent connections (if needed)
+      - "3000:3000"
     depends_on:
       - docker  # Ensure Docker starts first
     volumes:

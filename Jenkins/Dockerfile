@@ -1,7 +1,7 @@
 # Dockerfile: DinD with npm installed
 FROM docker:dind
 
+# Install nodejs in dind server
 RUN apk add --no-cache nodejs npm
 
-# Optional: show versions during build
 RUN node -v && npm -v

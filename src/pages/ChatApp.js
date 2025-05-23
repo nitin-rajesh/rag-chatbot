@@ -41,7 +41,7 @@ const ChatApp = () => {
 
   const askQuestion = async (question) => {
     try {
-      const response = await axios.post('http://localhost:8000/ask', {
+      const response = await axios.post('http://iiitb-chatbot:8000/ask', {
         question,
       }, {
         headers: {

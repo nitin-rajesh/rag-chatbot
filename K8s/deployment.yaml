@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: rag-chatbot
-          image: nitinrajesh/rag-chatbot:latest
+          image: archis002/rag-chatbot:latest
           ports:
             - containerPort: 3000  # Change to your app's port

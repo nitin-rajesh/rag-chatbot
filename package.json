@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@appbaseio/reactivesearch": "^4.3.0",
     "@sentry/react": "^9.20.0",
     "@sentry/tracing": "^7.120.3",
     "@testing-library/dom": "^10.4.0",

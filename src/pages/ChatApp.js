@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 import axios from 'axios';
+import logApiEvent from "../services/axiosLogger";
+
+import {
+  ReactiveBase,
+} from "@appbaseio/reactivesearch";
 
 const ChatApp = () => {
   const [messages, setMessages] = useState([
@@ -40,20 +45,36 @@ const ChatApp = () => {
   };
 
   const askQuestion = async (question) => {
+    const start = performance.now();
     try {
-      const response = await axios.post('http://localhost:8000/ask', {
+      const response = await axios.post('https://seasnail-shining-hawk.ngrok-free.app/ask', {
         question,
       }, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
-  
+      const duration = performance.now() - start;
+      logApiEvent({
+        type: 'api-call',
+        endpoint: '/api/send',
+        status: 'success',
+        duration,
+      });
       console.log('Response:', response.data);
       return response.data;
 
     } catch (error) {
       console.error('Error:', error);
+      const duration = performance.now() - start;
+
+      logApiEvent({
+        type: 'api-call',
+        endpoint: '/api/send',
+        status: 'error',
+        duration,
+        error: error.message,
+      });
       return dummyResponse('');
     }
 
